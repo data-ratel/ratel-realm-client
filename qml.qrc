@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
         <file>res/title_button_win/close_click.png</file>
         <file>res/title_button_win/close_click@2x.png</file>
         <file>res/title_button_win/close_click@3x.png</file>
@@ -49,8 +48,9 @@
         <file>res/title_button_win/restore_normal.png</file>
         <file>res/title_button_win/restore_normal@2x.png</file>
         <file>res/title_button_win/restore_normal@3x.png</file>
-        <file>Components/IconButton.qml</file>
-        <file>Components/TitleBar.qml</file>
+        <file>ui/components/IconButton.qml</file>
+        <file>ui/components/TitleBar.qml</file>
+        <file>ui/main.qml</file>
     </qresource>
     <qresource prefix="/common"/>
 </RCC>

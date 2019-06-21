@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtGraphicalEffects 1.0
-import "Components"
+import "components"
 
 Window {
     id: main_window
