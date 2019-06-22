@@ -6,45 +6,66 @@ import "components"
 Window {
     id: main_window
 
-    flags: Qt.FramelessWindowHint | Qt.Window
-
     visible: true
     width: 1200
     height: 700
     minimumWidth: 1200
     minimumHeight: 700
     title: qsTr("Ratel Realm")
-    color: "#00000000" // transparent window
+    color: "transparent" // transparent window
 
     Rectangle {
         id: window_content
         anchors.fill: parent
-        anchors {
-            margins: {10, 10, 10, 10}
-        }
 
         color: "#FFFFFF"
-        radius: 4
 
-        TitleBar {
-            id: title_bar
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
+        Rectangle {
+            id: left_panel
             anchors.top: parent.top
-            anchors.topMargin: 0
-            radius: parent.radius
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            width: 60
+            color: "slategray"
 
-            height: 40
+            MouseArea {
+                id: ma
+                anchors.fill: parent
+                property variant pt_pressed: Qt.point(0, 0)
+                onPressed: {
+                    pt_pressed.x = mouseX
+                    pt_pressed.y = mouseY
+                }
+
+                onPositionChanged: {
+                    if (main_window.visibility !== Window.Windowed) {
+                        return
+                    }
+
+                    main_window.x += mouseX - pt_pressed.x
+                    main_window.y += mouseY - pt_pressed.y
+                }
+            }
         }
-    }
 
-    DropShadow {
-        anchors.fill: window_content
-        radius: 10
-        samples: 10
-        source: window_content
-        color: "black"
+        Rectangle {
+            id: right_panel
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: left_panel.right
+            anchors.right: parent.right
+
+            TitleBar {
+                id: title_bar
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                anchors.top: parent.top
+                anchors.topMargin: 0
+
+                height: 40
+            }
+        }
     }
 }

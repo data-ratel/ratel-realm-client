@@ -23,8 +23,7 @@ Rectangle {
         }
 
         onPositionChanged: {
-            if (main_window.visibility === Window.Maximized ||
-                main_window.visibility !== Window.Windowed ||
+            if (main_window.visibility !== Window.Windowed ||
                 mouse_double_clicked) {
                 return
             }
@@ -79,22 +78,28 @@ Rectangle {
             bk_img_click: "qrc:/res/title_button_win/maximize_click.png";
             bk_img_disable: "qrc:/res/title_button_win/maximize_disable.png";
 
+            Connections {
+                target: main_window
+                onVisibilityChanged: {
+                    var is_maximize = main_window.visibility === Window.Maximized
+
+                    btn_max_restore.bk_img_normal = is_maximize ? "qrc:/res/title_button_win/restore_normal.png" :
+                                                                  "qrc:/res/title_button_win/maximize_normal.png"
+                    btn_max_restore.bk_img_hover = is_maximize ? "qrc:/res/title_button_win/restore_hover.png" :
+                                                                 "qrc:/res/title_button_win/maximize_hover.png"
+                    btn_max_restore.bk_img_click = is_maximize ? "qrc:/res/title_button_win/restore_click.png" :
+                                                                 "qrc:/res/title_button_win/maximize_click.png"
+                    btn_max_restore.bk_img_disable = is_maximize ? "qrc:/res/title_button_win/restore_disable.png" :
+                                                                   "qrc:/res/title_button_win/maximize_disable.png"
+                }
+            }
+
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     var is_maximize = main_window.visibility === Window.Maximized
                     main_window.visibility = is_maximize ? Window.AutomaticVisibility : Window.Maximized
-                    is_maximize = main_window.visibility === Window.Maximized
-
-                    parent.bk_img_normal = is_maximize ? "qrc:/res/title_button_win/restore_normal.png" :
-                                                         "qrc:/res/title_button_win/maximize_normal.png"
-                    parent.bk_img_hover = is_maximize ? "qrc:/res/title_button_win/restore_hover.png" :
-                                                        "qrc:/res/title_button_win/maximize_hover.png"
-                    parent.bk_img_click = is_maximize ? "qrc:/res/title_button_win/restore_click.png" :
-                                                        "qrc:/res/title_button_win/maximize_click.png"
-                    parent.bk_img_disable = is_maximize ? "qrc:/res/title_button_win/restore_disable.png" :
-                                                          "qrc:/res/title_button_win/maximize_disable.png"
                 }
             }
         }
