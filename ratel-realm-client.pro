@@ -28,4 +28,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 LIBS += user32.lib dwmapi.lib
 
 include($$PWD/src/app/app.pri)
+include($$PWD/src/qmlbe/qmlbe.pri)
 include($$PWD/src/util/util.pri)

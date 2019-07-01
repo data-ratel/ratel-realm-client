@@ -2,18 +2,22 @@
 #include <Windows.h>
 #include <windowsx.h>
 #include <QByteArray>
+#include <QWindow>
 
 #include <QDebug>
 
 bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
+#ifdef Q_OS_WIN
     if (eventType == "windows_generic_MSG") {
         MSG* msg = static_cast<MSG *>(message);
+        if (msg == Q_NULLPTR)
+            return false;
 
         switch(msg->message) {
         case WM_COMMAND: {
-          SendMessage( msg->hwnd, WM_SYSCOMMAND, msg->wParam, msg->lParam );
-          *result = DefWindowProc( msg->hwnd, msg->message, msg->wParam, msg->lParam );
+          SendMessage(msg->hwnd, WM_SYSCOMMAND, msg->wParam, msg->lParam);
+          *result = DefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
           return true;
         }
         case WM_NCCALCSIZE:{
@@ -32,8 +36,14 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
             long x = GET_X_LPARAM(msg->lParam);
             long y = GET_Y_LPARAM(msg->lParam);
 
-            if (x >= winrect.left && x < winrect.right - 120 &&
-                    y > winrect.top + borderWidth && y < winrect.top + 40) {
+            // caption, a.k.a. title bar
+            auto wndScaleFactor = qgetenv("QT_SCALE_FACTOR").toDouble();
+            int titleBarHeight = m_wndsParams[(WId)msg->hwnd]["TitleHeight"].toInt();
+            titleBarHeight = static_cast<int>(titleBarHeight * wndScaleFactor);
+            int titleBarBtnsWidth = m_wndsParams[(WId)msg->hwnd]["TitleBarButtonsArea"].toSize().width();
+            titleBarBtnsWidth = static_cast<int>(titleBarBtnsWidth * wndScaleFactor);
+            if (x >= winrect.left && x < winrect.right - titleBarBtnsWidth &&
+                    y > winrect.top + borderWidth && y < winrect.top + titleBarHeight) {
                 *result = HTCAPTION;
                 return true;
             }
@@ -87,6 +97,17 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
             break;
         }
     }
+#endif
 
     return false;
+}
+
+void NativeEventFilter::setWndTitleHeight(QWindow *wnd, int wndTitleHeight)
+{
+    m_wndsParams[wnd->winId()]["TitleHeight"] = wndTitleHeight;
+}
+
+void NativeEventFilter::setWndTitleBarButtonsArea(QWindow *wnd, const QSize &wndTitleBarButtonsArea)
+{
+    m_wndsParams[wnd->winId()]["TitleBarButtonsArea"] = wndTitleBarButtonsArea;
 }

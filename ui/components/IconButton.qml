@@ -7,7 +7,6 @@ Button {
     property string bk_img_click: ""
     property string bk_img_disable: ""
 
-    id: btn_close
     enabled: true
     display: AbstractButton.IconOnly
     antialiasing: true
@@ -19,10 +18,16 @@ Button {
     highlighted: false
     flat: true
 
+    Binding {
+        target: bk_img
+        property: "source"
+        value: bk_img_normal
+    }
+
     background: Image {
         id: bk_img
         anchors.fill: parent
-        source: btn_close.bk_img_normal
+        source: parent.bk_img_normal
         fillMode: Image.Stretch
 
         onSourceSizeChanged: {

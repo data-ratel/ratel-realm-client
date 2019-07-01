@@ -9,34 +9,11 @@ Rectangle {
     color: "#F2F6FC"
     border.width: 0
 
-    MouseArea {
-        id: ma
-        anchors.fill: parent
-        property variant pt_pressed: Qt.point(0, 0)
-        property bool mouse_double_clicked: false
-        onPressed: {
-            pt_pressed.x = mouseX
-            pt_pressed.y = mouseY
-        }
-        onReleased: {
-            mouse_double_clicked = false
-        }
+    property Window wnd: null
 
-        onPositionChanged: {
-            if (main_window.visibility !== Window.Windowed ||
-                mouse_double_clicked) {
-                return
-            }
-
-            main_window.x += mouseX - pt_pressed.x
-            main_window.y += mouseY - pt_pressed.y
-        }
-
-        onDoubleClicked: {
-            main_window.visibility = main_window.visibility === Window.Maximized ?
-                           Window.AutomaticVisibility : Window.Maximized
-            mouse_double_clicked = true
-        }
+    Component.onCompleted: {
+        backend.notifyQmlEvent(wnd, "SetWindowTitleHeight", title_bar.height)
+        backend.notifyQmlEvent(wnd, "SetTitleBarButtonsArea", Qt.size(row_title_bar_buttons.width, row_title_bar_buttons.height))
     }
 
     Row {
@@ -62,7 +39,7 @@ Rectangle {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    main_window.close()
+                    wnd.close()
                 }
             }
         }
@@ -79,9 +56,9 @@ Rectangle {
             bk_img_disable: "qrc:/res/title_button_win/maximize_disable.png";
 
             Connections {
-                target: main_window
+                target: wnd
                 onVisibilityChanged: {
-                    var is_maximize = main_window.visibility === Window.Maximized
+                    var is_maximize = wnd.visibility === wnd.Maximized
 
                     btn_max_restore.bk_img_normal = is_maximize ? "qrc:/res/title_button_win/restore_normal.png" :
                                                                   "qrc:/res/title_button_win/maximize_normal.png"
@@ -98,8 +75,8 @@ Rectangle {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    var is_maximize = main_window.visibility === Window.Maximized
-                    main_window.visibility = is_maximize ? Window.AutomaticVisibility : Window.Maximized
+                    var is_maximize = wnd.visibility === Window.Maximized
+                    wnd.visibility = is_maximize ? Window.AutomaticVisibility : Window.Maximized
                 }
             }
         }
@@ -119,7 +96,12 @@ Rectangle {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    main_window.visibility = Window.Minimized
+                    // workground for QT's bug.
+                    // if call showMinimized() of QWindow while this window is maximized,
+                    // then this window will restore to normal size (not maximized) after calling showNormal()
+                    // so try to send a event to c++ backend engine, then call native method to show this window
+                    // minimized.
+                    backend.notifyQmlEvent(wnd, "ShowWindowMinimize")
                 }
             }
         }
