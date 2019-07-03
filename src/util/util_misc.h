@@ -5,6 +5,8 @@
 #include <QObject>
 #include <Windows.h>
 #include <QAbstractNativeEventFilter>
+#include "multiscreen_helper/multiscreen_helper.h"
+
 namespace Util {
 
 enum class Style : DWORD
@@ -17,6 +19,12 @@ class Misc
 {
 public:
     static void enableWindowBorderless(qulonglong wId);
+
+    static void enableHighDpiSupport();
+
+    static QVector<MultiScreenHelper::ScreenInfo> getAllScreenInfo();
+
+    static MultiScreenHelper::ScreenInfo getPrimaryScreenInfo();
 };
 
 }

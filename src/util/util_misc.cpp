@@ -4,6 +4,7 @@
 #include <windowsx.h>
 #include <QByteArray>
 #include <QGuiApplication>
+#include <QDebug>
 
 namespace Util {
 
@@ -21,6 +22,22 @@ void Misc::enableWindowBorderless(qulonglong wId)
     //redraw frame
     SetWindowPos(wnd, Q_NULLPTR, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
     ShowWindow(wnd, SW_SHOW);
+}
+
+void Misc::enableHighDpiSupport()
+{
+    auto scinfo = Util::Misc::getPrimaryScreenInfo();
+    qputenv("QT_SCALE_FACTOR", QString("%1").arg(scinfo.scalingFactor).toLatin1());
+}
+
+QVector<MultiScreenHelper::ScreenInfo> Util::Misc::getAllScreenInfo()
+{
+    return MultiScreenHelper::getAllScreensInfo();
+}
+
+MultiScreenHelper::ScreenInfo Misc::getPrimaryScreenInfo()
+{
+    return MultiScreenHelper::getPrimaryScreenInfo();
 }
 
 }

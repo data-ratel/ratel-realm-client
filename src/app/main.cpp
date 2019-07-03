@@ -9,7 +9,8 @@ void runQmlEngine();
 
 int main(int argc, char *argv[])
 {
-    qputenv("QT_SCALE_FACTOR", "1.25");
+    Util::Misc::enableHighDpiSupport();
+
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
 //    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);

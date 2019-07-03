@@ -18,7 +18,7 @@ Window {
     color: "transparent" // transparent window
 
     onVisibilityChanged: {
-        // tricks for maximized window, if not do so, the window will exceed the monitor with about 8 pixels.
+        // tricks for maximized window on Microsoft Windows, if not do so, the window will exceed the monitor with about 8 pixels.
         var is_maximized = main_window.visibility === Window.Maximized
         var exceed_pixels = Math.round(8 / Screen.devicePixelRatio)
         window_content.anchors.margins = is_maximized ? exceed_pixels : 0
