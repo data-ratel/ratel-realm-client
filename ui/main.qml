@@ -9,8 +9,6 @@ import "components"
 Window {
     id: main_window
 
-    flags: ((Qt.platform.os == "osx") ? Qt.WindowFullscreenButtonHint : main_window.flags)
-
     visible: true
     width: 1000
     height: 600
@@ -36,6 +34,10 @@ Window {
     }
 
     Component.onCompleted: {
+        if (Qt.platform.os == "osx") {
+            flags = Qt.WindowFullscreenButtonHint
+        }
+
         backend.notifyQmlEvent(this, "EnableWindowBorderless")
     }
 
