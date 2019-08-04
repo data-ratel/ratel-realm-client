@@ -25,7 +25,9 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+win {
 LIBS += user32.lib dwmapi.lib
+}
 
 include($$PWD/src/app/app.pri)
 include($$PWD/src/qmlbe/qmlbe.pri)

@@ -4,7 +4,10 @@
 #include <QQuickWindow>
 #include <QTimer>
 #include <QDebug>
+
+#ifdef Q_OS_WIN
 #include <Windows.h>
+#endif
 
 #include <util_misc.h>
 #include <native_event_filter.h>
