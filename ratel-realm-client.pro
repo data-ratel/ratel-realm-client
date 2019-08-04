@@ -29,6 +29,10 @@ win {
 LIBS += user32.lib dwmapi.lib
 }
 
+macx{
+LIBS += -framework Cocoa
+}
+
 include($$PWD/src/app/app.pri)
 include($$PWD/src/qmlbe/qmlbe.pri)
 include($$PWD/src/util/util.pri)

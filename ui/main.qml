@@ -9,6 +9,8 @@ import "components"
 Window {
     id: main_window
 
+    flags: (Qt.platform.os == "osx") ? Qt.WindowFullscreenButtonHint : main_window.flags
+
     visible: true
     width: 1000
     height: 600
@@ -24,12 +26,17 @@ Window {
             var exceed_pixels = Math.round(8 / Screen.devicePixelRatio)
             window_content.anchors.margins = is_maximized ? exceed_pixels : 0
         }
+
+        if (Qt.platform.os == "osx") {
+            // workground for a weird bug: after restoring from fullscreen, the title bar of the window appears again.
+            if (main_window.visibility == Window.Windowed) {
+                backend.notifyQmlEvent(this, "EnableWindowBorderless")
+            }
+        }
     }
 
     Component.onCompleted: {
-        if (Qt.platform.os == "windows") {
-            backend.notifyQmlEvent(this, "EnableWindowBorderless")
-        }
+        backend.notifyQmlEvent(this, "EnableWindowBorderless")
     }
 
     QmlBackendEngine {

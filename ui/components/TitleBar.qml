@@ -10,10 +10,15 @@ Rectangle {
     border.width: 0
 
     property Window wnd: null
+    property bool is_os_windows: false
 
     Component.onCompleted: {
         backend.notifyQmlEvent(wnd, "SetWindowTitleHeight", title_bar.height)
         backend.notifyQmlEvent(wnd, "SetTitleBarButtonsArea", Qt.size(row_title_bar_buttons.width, row_title_bar_buttons.height))
+
+        if (Qt.platform.os == "windows") {
+            is_os_windows = true
+        }
     }
 
     Row {
@@ -23,6 +28,7 @@ Rectangle {
         anchors.rightMargin: 10
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+        visible: is_os_windows
 
         IconButton {
             id: btn_close
@@ -96,12 +102,20 @@ Rectangle {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
+                    // *********************************************************************************************************** //
                     // workground for QT's bug.
-                    // if call showMinimized() of QWindow while this window is maximized,
+                    // on WINDOWS: if call showMinimized() of QWindow while this window is maximized,
                     // then this window will restore to normal size (not maximized) after calling showNormal()
                     // so try to send a event to c++ backend engine, then call native method to show this window
                     // minimized.
-                    backend.notifyQmlEvent(wnd, "ShowWindowMinimize")
+                    //
+                    // on MACOS: showMinimized() of QWindow cannot work at all if the window's flag contains Qt.FramelessWindowHint
+                    // *********************************************************************************************************** //
+                    if (Qt.platform.os == "windows") {
+                        backend.notifyQmlEvent(wnd, "ShowWindowMinimize")
+                    } else {
+                        wnd.visibility = Window.Minimized
+                    }
                 }
             }
         }

@@ -12,7 +12,14 @@ int main(int argc, char *argv[])
     Util::Misc::enableHighDpiSupport();
 
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+#ifdef Q_OS_WIN
     QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL);
+#elif defined (Q_OS_MAC)
+    QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+#else
+    QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+#endif
 
     QGuiApplication app(argc, argv);
 
