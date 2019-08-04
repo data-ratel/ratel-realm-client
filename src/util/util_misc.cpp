@@ -7,8 +7,9 @@
 #endif
 
 namespace Util {
+namespace Misc {
 
-void Misc::enableWindowBorderless(qulonglong wId)
+void enableWindowBorderless(qulonglong wId)
 {
 #ifdef Q_OS_WIN
     Util::Misc::enableWindowBorderlessWin(wId);
@@ -17,12 +18,13 @@ void Misc::enableWindowBorderless(qulonglong wId)
 #endif
 }
 
-void Misc::enableHighDpiSupport()
+void enableHighDpiSupport()
 {
 #ifdef Q_OS_WIN
-    Util::Misc::enableHighDpiSupportWin(wId);
+    Util::Misc::enableHighDpiSupportWin();
 #elif defined (Q_OS_MAC)
 #endif
 }
 
+}
 }

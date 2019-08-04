@@ -1,4 +1,4 @@
-win32{
+win32 {
 HEADERS += \
     $$PWD/multiscreen_helper.h
 

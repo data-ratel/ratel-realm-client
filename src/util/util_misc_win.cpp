@@ -29,18 +29,18 @@ void enableWindowBorderlessWin(qulonglong wId)
     ShowWindow(wnd, SW_SHOW);
 }
 
-void Misc::enableHighDpiSupport()
+void enableHighDpiSupportWin()
 {
     auto scinfo = Util::Misc::getPrimaryScreenInfo();
     qputenv("QT_SCALE_FACTOR", QString("%1").arg(scinfo.scalingFactor).toLatin1());
 }
 
-QVector<MultiScreenHelper::ScreenInfo> Util::Misc::getAllScreenInfo()
+QVector<MultiScreenHelper::ScreenInfo> getAllScreenInfo()
 {
     return MultiScreenHelper::getAllScreensInfo();
 }
 
-MultiScreenHelper::ScreenInfo Misc::getPrimaryScreenInfo()
+MultiScreenHelper::ScreenInfo getPrimaryScreenInfo()
 {
     return MultiScreenHelper::getPrimaryScreenInfo();
 }

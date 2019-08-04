@@ -9,7 +9,7 @@ import "components"
 Window {
     id: main_window
 
-    flags: (Qt.platform.os == "osx") ? Qt.WindowFullscreenButtonHint : main_window.flags
+    flags: ((Qt.platform.os == "osx") ? Qt.WindowFullscreenButtonHint : main_window.flags)
 
     visible: true
     width: 1000
